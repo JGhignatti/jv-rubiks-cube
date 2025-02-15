@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>JV Rubik's Cube</title>
+    <link rel="icon" href="./favicon.ico" type="image/x-icon" />
+
+    <style>
+      :root {
+        --red-500: oklch(0.637 0.237 25.331);
+
+        --orange-500: oklch(0.705 0.213 47.604);
+
+        --yellow-400: oklch(0.852 0.199 91.936);
+
+        --green-500: oklch(0.723 0.219 149.579);
+
+        --blue-500: oklch(0.623 0.214 259.815);
+
+        --violet-500: oklch(0.606 0.25 292.717);
+
+        --white: #fff;
+
+        --slate-300: oklch(0.869 0.022 252.894);
+        --slate-700: oklch(0.372 0.044 257.287);
+        --slate-800: oklch(0.279 0.041 260.031);
+      }
+
+      body {
+        width: 100vw;
+        height: 100vh;
+
+        margin: 0;
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+
+        background-color: var(--slate-800);
+      }
+
+      #container,
+      #actions-container {
+        position: relative;
+
+        border: 2px solid var(--slate-300);
+        border-radius: 12px;
+      }
+
+      #actions-container {
+        padding: 32px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      #actions-container > button {
+        padding: 8px 16px;
+
+        color: var(--white);
+        background-color: transparent;
+
+        border: 2px solid var(--slate-700);
+        border-radius: 8px;
+        outline-color: var(--violet-500);
+
+        cursor: pointer;
+
+        transition: all 150ms ease-in-out;
+      }
+
+      #actions-container > button:hover {
+        background-color: var(--slate-700);
+        box-shadow: 0 10px 15px -3px color-mix(in oklab, var(--violet-500) 50%, transparent),
+          0 4px 6px -4px color-mix(in oklab, var(--violet-500) 50%, transparent);
+      }
+
+      #actions-container > button:focus-visible {
+        outline: 2px solid var(--violet-500);
+        outline-offset: 2px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container"></div>
+
+    <div id="actions-container">
+      <button id="button-front">F</button>
+      <button id="button-front-prime">F'</button>
+      <button id="button-up">U</button>
+      <button id="button-up-prime">U'</button>
+      <button id="button-right">R</button>
+      <button id="button-right-prime">R'</button>
+      <button id="button-left">L</button>
+      <button id="button-left-prime">L'</button>
+      <button id="button-down">D</button>
+      <button id="button-down-prime">D'</button>
+      <button id="button-back">B</button>
+      <button id="button-back-prime">B'</button>
+    </div>
+
+    <script src="index.js"></script>
+  </body>
+</html>
