@@ -122,7 +122,7 @@ export function createCube(container, initialState) {
         state.up.replaceRow(state.right.getCol(2), 0);
         state.right.replaceCol(state.down.getRow(2), 2, true);
         state.down.replaceRow(state.left.getCol(0), 2);
-        state.left.replaceCol(tmp, 0);
+        state.left.replaceCol(tmp, 0, true);
         state.back.rotate();
 
         return state;
@@ -157,15 +157,102 @@ export function createCube(container, initialState) {
 
         return state;
       }
-      case 'F_PRIME':
-      case 'U_PRIME':
-      case 'R_PRIME':
-      case 'L_PRIME':
-      case 'D_PRIME':
-      case 'B_PRIME':
-      case 'M_PRIME':
-      case 'E_PRIME':
-      case 'S_PRIME':
+      case 'F_PRIME': {
+        const tmp = state.up.getRow(2);
+
+        state.up.replaceRow(state.right.getCol(0), 2);
+        state.right.replaceCol(state.down.getRow(0), 0, true);
+        state.down.replaceRow(state.left.getCol(2), 0);
+        state.left.replaceCol(tmp, 2, true);
+        state.front.rotate(false);
+
+        return state;
+      }
+      case 'U_PRIME': {
+        const tmp = state.front.getRow(0);
+
+        state.front.replaceRow(state.left.getRow(0), 0);
+        state.left.replaceRow(state.back.getRow(0), 0);
+        state.back.replaceRow(state.right.getRow(0), 0);
+        state.right.replaceRow(tmp, 0);
+        state.up.rotate(false);
+
+        return state;
+      }
+      case 'R_PRIME': {
+        const tmp = state.front.getCol(2);
+
+        state.front.replaceCol(state.up.getCol(2), 2);
+        state.up.replaceCol(state.back.getCol(0), 2, true);
+        state.back.replaceCol(state.down.getCol(2), 0, true);
+        state.down.replaceCol(tmp, 2);
+        state.right.rotate(false);
+
+        return state;
+      }
+      case 'L_PRIME': {
+        const tmp = state.front.getCol(0);
+
+        state.front.replaceCol(state.down.getCol(0), 0);
+        state.down.replaceCol(state.back.getCol(2), 0, true);
+        state.back.replaceCol(state.up.getCol(0), 2, true);
+        state.up.replaceCol(tmp, 0);
+        state.left.rotate(false);
+
+        return state;
+      }
+      case 'D_PRIME': {
+        const tmp = state.front.getRow(2);
+
+        state.front.replaceRow(state.right.getRow(2), 2);
+        state.right.replaceRow(state.back.getRow(2), 2);
+        state.back.replaceRow(state.left.getRow(2), 2);
+        state.left.replaceRow(tmp, 2);
+        state.down.rotate(false);
+
+        return state;
+      }
+      case 'B_PRIME': {
+        const tmp = state.up.getRow(0);
+
+        state.up.replaceRow(state.left.getCol(0), 0, true);
+        state.left.replaceCol(state.down.getRow(2), 0);
+        state.down.replaceRow(state.right.getCol(2), 2, true);
+        state.right.replaceCol(tmp, 2);
+        state.back.rotate(false);
+
+        return state;
+      }
+      case 'M_PRIME': {
+        const tmp = state.front.getCol(1);
+
+        state.front.replaceCol(state.down.getCol(1), 1);
+        state.down.replaceCol(state.back.getCol(1), 1, true);
+        state.back.replaceCol(state.up.getCol(1), 1, true);
+        state.up.replaceCol(tmp, 1);
+
+        return state;
+      }
+      case 'E_PRIME': {
+        const tmp = state.front.getRow(1);
+
+        state.front.replaceRow(state.right.getRow(1), 1);
+        state.right.replaceRow(state.back.getRow(1), 1);
+        state.back.replaceRow(state.left.getRow(1), 1);
+        state.left.replaceRow(tmp, 1);
+
+        return state;
+      }
+      case 'S_PRIME': {
+        const tmp = state.up.getRow(1);
+
+        state.up.replaceRow(state.right.getCol(1), 1);
+        state.right.replaceCol(state.down.getRow(1), 1, true);
+        state.down.replaceRow(state.left.getCol(1), 1);
+        state.left.replaceCol(tmp, 1, true);
+
+        return state;
+      }
       default:
         return state;
     }
