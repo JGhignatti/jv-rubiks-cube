@@ -9,19 +9,18 @@
 
     <style>
       :root {
-        --red-500: oklch(0.637 0.237 25.331);
+        --red: oklch(0.637 0.237 25.331);
+        --orange: oklch(0.705 0.213 47.604);
+        --yellow: oklch(0.852 0.199 91.936);
+        --green: oklch(0.723 0.219 149.579);
+        --blue: oklch(0.623 0.214 259.815);
+        --white: #fff;
 
-        --orange-500: oklch(0.705 0.213 47.604);
+        --guideline: oklch(0.372 0.044 257.287);
 
-        --yellow-400: oklch(0.852 0.199 91.936);
-
-        --green-500: oklch(0.723 0.219 149.579);
-
-        --blue-500: oklch(0.623 0.214 259.815);
+        --outline: oklch(0.869 0.022 252.894);
 
         --violet-500: oklch(0.606 0.25 292.717);
-
-        --white: #fff;
 
         --slate-300: oklch(0.869 0.022 252.894);
         --slate-700: oklch(0.372 0.044 257.287);
@@ -53,8 +52,8 @@
       #actions-container {
         padding: 32px;
 
-        display: flex;
-        flex-direction: column;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
         gap: 16px;
       }
 
@@ -101,8 +100,14 @@
       <button id="button-down-prime">D'</button>
       <button id="button-back">B</button>
       <button id="button-back-prime">B'</button>
+      <button id="button-m">M</button>
+      <button id="button-m-prime">M'</button>
+      <button id="button-e">E</button>
+      <button id="button-e-prime">E'</button>
+      <button id="button-s">S</button>
+      <button id="button-s-prime">S'</button>
     </div>
 
-    <script src="index.js"></script>
+    <script type="module" src="index.js"></script>
   </body>
 </html>
