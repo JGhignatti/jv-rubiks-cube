@@ -98,6 +98,8 @@ export function createCube(container, initialState) {
     });
   });
 
+  let _moving = false;
+
   /**
    * @param {_State} state
    * @param {Move} action
@@ -422,6 +424,8 @@ export function createCube(container, initialState) {
       };
     });
 
+    _moving = true;
+
     let stepCounter = 0;
     const interval = setInterval(() => {
       if (stepCounter < 11) {
@@ -431,6 +435,8 @@ export function createCube(container, initialState) {
 
         stepCounter++;
       } else {
+        _moving = false;
+
         clearInterval(interval);
       }
     }, CONSTS.SPEED * 10);
@@ -524,6 +530,10 @@ export function createCube(container, initialState) {
       return _state;
     },
     move(action) {
+      if (_moving) {
+        return;
+      }
+
       const futureState = reducer(_state, action);
 
       tween(futureState);
