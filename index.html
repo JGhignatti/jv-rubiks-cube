@@ -8,23 +8,46 @@
     <link rel="icon" href="./favicon.ico" type="image/x-icon" />
 
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
       :root {
-        --red: oklch(0.637 0.237 25.331);
-        --orange: oklch(0.705 0.213 47.604);
-        --yellow: oklch(0.852 0.199 91.936);
-        --green: oklch(0.723 0.219 149.579);
-        --blue: oklch(0.623 0.214 259.815);
-        --white: #fff;
+        /* Cube colors */
+        --cube-red: oklch(0.637 0.237 25.331);
+        --cube-orange: oklch(0.705 0.213 47.604);
+        --cube-yellow: oklch(0.852 0.199 91.936);
+        --cube-green: oklch(0.723 0.219 149.579);
+        --cube-blue: oklch(0.623 0.214 259.815);
+        --cube-white: #fff;
 
-        --guideline: oklch(0.372 0.044 257.287);
+        --cube-guideline: var(--slate-700);
+        --cube-outline: var(--slate-300);
 
-        --outline: oklch(0.869 0.022 252.894);
+        /* App colors */
+        --foreground: var(--slate-100);
 
+        --bg-dark: var(--slate-800);
+        --bg-light: var(--slate-500);
+
+        --focus-outline: var(--violet-500);
+
+        /* Color palette */
         --violet-500: oklch(0.606 0.25 292.717);
 
+        --slate-50: oklch(0.984 0.003 247.858);
+        --slate-100: oklch(0.968 0.007 247.896);
+        --slate-200: oklch(0.929 0.013 255.508);
         --slate-300: oklch(0.869 0.022 252.894);
+        --slate-400: oklch(0.704 0.04 256.788);
+        --slate-500: oklch(0.554 0.046 257.417);
+        --slate-600: oklch(0.446 0.043 257.281);
         --slate-700: oklch(0.372 0.044 257.287);
         --slate-800: oklch(0.279 0.041 260.031);
+        --slate-900: oklch(0.208 0.042 265.755);
+        --slate-950: oklch(0.129 0.042 264.695);
+      }
+
+      html {
+        font-size: 16px;
       }
 
       body {
@@ -33,80 +56,140 @@
 
         margin: 0;
 
+        color: var(--foreground);
+
+        font-family: 'Rubik', sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 1rem;
+
+        background-color: var(--bg-dark);
+      }
+
+      header {
+        width: 100%;
+
+        padding: 1.5rem 0;
+
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 16px;
-
-        background-color: var(--slate-800);
       }
 
-      #container,
-      #actions-container {
+      header > h1 {
+        margin: 0;
+
+        font-size: 2.5rem;
+      }
+
+      main {
+        display: flex;
+
+        gap: 1rem;
+
+        align-items: center;
+        justify-content: center;
+      }
+
+      #container {
         position: relative;
 
-        border: 2px solid var(--slate-300);
-        border-radius: 12px;
+        min-width: 600px;
+        min-height: 600px;
+
+        flex-shrink: 0;
+
+        border: 2px solid var(--bg-light);
+        border-radius: 0.75rem;
       }
 
-      #actions-container {
-        padding: 32px;
-
+      #moves {
         display: grid;
+
+        padding: 1rem;
+
         grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
+        gap: 0.5rem;
+
+        flex-shrink: 0;
+
+        border: 2px solid var(--bg-light);
+        border-radius: 0.75rem;
       }
 
-      #actions-container > button {
-        padding: 8px 16px;
+      @media (max-width: 950px) {
+        main {
+          flex-direction: column;
+        }
 
-        color: var(--white);
+        #moves {
+          grid-template-columns: 1fr;
+          grid-template-rows: repeat(2, 1fr);
+          grid-auto-flow: column;
+        }
+      }
+
+      #moves > button {
+        padding: 0.5rem 1rem;
+
+        font-size: 1.25rem;
+
+        color: var(--foreground);
+
         background-color: transparent;
 
-        border: 2px solid var(--slate-700);
+        border: 2px solid var(--bg-light);
         border-radius: 8px;
-        outline-color: var(--violet-500);
+        outline-color: var(--focus-outline);
 
         cursor: pointer;
 
         transition: all 150ms ease-in-out;
       }
 
-      #actions-container > button:hover {
-        background-color: var(--slate-700);
-        box-shadow: 0 10px 15px -3px color-mix(in oklab, var(--violet-500) 50%, transparent),
-          0 4px 6px -4px color-mix(in oklab, var(--violet-500) 50%, transparent);
+      #moves > button:hover {
+        background-color: var(--bg-light);
+        box-shadow: 0 10px 15px -3px color-mix(in oklab, var(--focus-outline)
+                50%, transparent),
+          0 4px 6px -4px color-mix(in oklab, var(--focus-outline) 50%, transparent);
       }
 
-      #actions-container > button:focus-visible {
-        outline: 2px solid var(--violet-500);
+      #moves > button:focus-visible {
+        outline: 2px solid var(--focus-outline);
         outline-offset: 2px;
       }
     </style>
   </head>
   <body>
-    <div id="container"></div>
+    <header>
+      <h1>JV Rubik's Cube</h1>
+    </header>
 
-    <div id="actions-container">
-      <button id="button-front">F</button>
-      <button id="button-front-prime">F'</button>
-      <button id="button-up">U</button>
-      <button id="button-up-prime">U'</button>
-      <button id="button-right">R</button>
-      <button id="button-right-prime">R'</button>
-      <button id="button-left">L</button>
-      <button id="button-left-prime">L'</button>
-      <button id="button-down">D</button>
-      <button id="button-down-prime">D'</button>
-      <button id="button-back">B</button>
-      <button id="button-back-prime">B'</button>
-      <button id="button-m">M</button>
-      <button id="button-m-prime">M'</button>
-      <button id="button-e">E</button>
-      <button id="button-e-prime">E'</button>
-      <button id="button-s">S</button>
-      <button id="button-s-prime">S'</button>
-    </div>
+    <main>
+      <div id="container"></div>
+
+      <div id="moves">
+        <button id="button-front">F</button>
+        <button id="button-front-prime">F'</button>
+        <button id="button-up">U</button>
+        <button id="button-up-prime">U'</button>
+        <button id="button-right">R</button>
+        <button id="button-right-prime">R'</button>
+        <button id="button-left">L</button>
+        <button id="button-left-prime">L'</button>
+        <button id="button-down">D</button>
+        <button id="button-down-prime">D'</button>
+        <button id="button-back">B</button>
+        <button id="button-back-prime">B'</button>
+        <button id="button-m">M</button>
+        <button id="button-m-prime">M'</button>
+        <button id="button-e">E</button>
+        <button id="button-e-prime">E'</button>
+        <button id="button-s">S</button>
+        <button id="button-s-prime">S'</button>
+      </div>
+    </main>
 
     <script type="module" src="index.js"></script>
   </body>

@@ -2,6 +2,7 @@
  * @typedef {Object} Cube
  * @property {_State} state
  * @property {(action: Move) => void} move
+ * @property {() => void} destroy
  */
 
 /**
@@ -20,6 +21,32 @@
  */
 
 /**
+ * @typedef {Object} Consts
+ * @property {number} SIDE
+ * @property {number} PADDING
+ * @property {number} SQUARE_DIAMETER
+ * @property {number} SPEED
+ */
+
+/**
+ * @typedef {Object} Planes
+ * @property {Guideline[]} top
+ * @property {Guideline[]} right
+ * @property {Guideline[]} left
+ */
+
+/**
+ * @typedef {Object} Guideline
+ * @property {number} x
+ * @property {number} y
+ * @property {number} r
+ * @property {number} d
+ * @property {0 | 1 | 2} ring
+ * @property {number} top
+ * @property {number} left
+ */
+
+/**
  * @param {HTMLDivElement} container
  * @param {_State} [initialState]
  *
@@ -28,19 +55,37 @@
 export function createCube(container, initialState) {
   const containerEl = container;
 
-  let speed = 5;
+  const CONSTS = buildConsts();
 
   const planes = getPlanes(containerEl.clientWidth);
   drawPlanes(containerEl, planes);
   const intersections = getIntersections(planes);
 
-  let _state = initialState ?? {
-    front: createSide('green'),
-    up: createSide('white'),
-    right: createSide('red'),
-    left: createSide('orange'),
-    down: createSide('yellow'),
-    back: createSide('blue'),
+  let _state = {
+    front: createSide(
+      initialState?.front?.squares.map((square) => square.color) || 'green',
+      CONSTS.SQUARE_DIAMETER,
+    ),
+    up: createSide(
+      initialState?.up?.squares.map((square) => square.color) || 'white',
+      CONSTS.SQUARE_DIAMETER,
+    ),
+    right: createSide(
+      initialState?.right?.squares.map((square) => square.color) || 'red',
+      CONSTS.SQUARE_DIAMETER,
+    ),
+    left: createSide(
+      initialState?.left?.squares.map((square) => square.color) || 'orange',
+      CONSTS.SQUARE_DIAMETER,
+    ),
+    down: createSide(
+      initialState?.down?.squares.map((square) => square.color) || 'yellow',
+      CONSTS.SQUARE_DIAMETER,
+    ),
+    back: createSide(
+      initialState?.back?.squares.map((square) => square.color) || 'blue',
+      CONSTS.SQUARE_DIAMETER,
+    ),
   };
 
   Object.entries(_state).forEach(([side, value]) => {
@@ -59,7 +104,7 @@ export function createCube(container, initialState) {
    *
    * @returns {_State}
    */
-  const reducer = (state, action) => {
+  function reducer(state, action) {
     switch (action) {
       case 'F': {
         const tmp = state.up.getRow(2);
@@ -256,29 +301,30 @@ export function createCube(container, initialState) {
       default:
         return state;
     }
-  };
+  }
 
   /**
    * @param {_State} state
    */
-  const tween = (state) => {
+  function tween(state) {
     const modified = [];
 
     Object.entries(state).forEach(([side, value]) => {
       value.squares.forEach((square, index) => {
         const intersection = intersections[side][index];
         const squareComputedStyleMap = square.el.computedStyleMap();
+        const squareRadius = CONSTS.SQUARE_DIAMETER / 2;
 
         if (
           Math.abs(
             squareComputedStyleMap.get('left').value +
-              SQUARE_RADIUS -
+              squareRadius -
               intersection.x,
           ) >= 0.5
         ) {
           const fromPoint = {
-            x: squareComputedStyleMap.get('left').value + SQUARE_RADIUS,
-            y: squareComputedStyleMap.get('top').value + SQUARE_RADIUS,
+            x: squareComputedStyleMap.get('left').value + squareRadius,
+            y: squareComputedStyleMap.get('top').value + squareRadius,
           };
           const toPoint = {
             x: intersection.x,
@@ -387,8 +433,91 @@ export function createCube(container, initialState) {
       } else {
         clearInterval(interval);
       }
-    }, speed * 10);
-  };
+    }, CONSTS.SPEED * 10);
+  }
+
+  /**
+   * @returns {Consts}
+   */
+  function buildConsts() {
+    const sideSize = Math.max(containerEl.clientWidth, 600);
+
+    let squareDiameter = 24;
+    if (sideSize < 750) {
+      squareDiameter = 18;
+    } else if (sideSize > 950) {
+      squareDiameter = 32;
+    }
+
+    return {
+      SIDE: sideSize,
+      PADDING: 24,
+      SQUARE_DIAMETER: squareDiameter,
+      SPEED: 3,
+    };
+  }
+
+  /**
+   * @returns {Planes}
+   */
+  function getPlanes() {
+    const CLIENT_SIDE = CONSTS.SIDE - 2 * CONSTS.PADDING;
+    const PLANE_DIAMETER = (CLIENT_SIDE * 2) / 3;
+    const PLANE_RADIUS = PLANE_DIAMETER / 2;
+    const DELTA_RING = 1.5 * CONSTS.SQUARE_DIAMETER;
+
+    /**
+     * @param {number} x
+     * @param {number} y
+     *
+     * @returns {Guideline[]}
+     */
+    function getGuidelines(x, y) {
+      return [0, 1, 2].map((ring) => {
+        const r = PLANE_RADIUS - ring * DELTA_RING;
+
+        return {
+          x,
+          y,
+          r,
+          d: 2 * r,
+          ring,
+          top: y - r,
+          left: x - r,
+        };
+      });
+    }
+
+    return {
+      top: getGuidelines(CONSTS.SIDE / 2, CONSTS.PADDING + PLANE_RADIUS),
+      right: getGuidelines(
+        CONSTS.PADDING + PLANE_DIAMETER,
+        CONSTS.PADDING + PLANE_DIAMETER,
+      ),
+      left: getGuidelines(
+        CONSTS.PADDING + PLANE_RADIUS,
+        CONSTS.PADDING + PLANE_DIAMETER,
+      ),
+    };
+  }
+
+  function drawPlanes() {
+    [planes.top, planes.right, planes.left].flat().forEach((guideline) => {
+      const guidelineEl = document.createElement('div');
+
+      guidelineEl.style.position = 'absolute';
+      guidelineEl.style.top = `${guideline.top}px`;
+      guidelineEl.style.left = `${guideline.left}px`;
+      guidelineEl.style.width = `${guideline.d}px`;
+      guidelineEl.style.height = `${guideline.d}px`;
+
+      guidelineEl.style.border = '1px solid var(--cube-guideline)';
+      guidelineEl.style.borderRadius = '100%';
+      guidelineEl.style.boxSizing = 'border-box';
+
+      containerEl.appendChild(guidelineEl);
+    });
+  }
 
   return {
     get state() {
@@ -397,9 +526,12 @@ export function createCube(container, initialState) {
     move(action) {
       const futureState = reducer(_state, action);
 
-      tween(futureState, planes, intersections);
+      tween(futureState);
 
       _state = futureState;
+    },
+    destroy() {
+      containerEl.innerHTML = '';
     },
   };
 }
@@ -416,12 +548,13 @@ export function createCube(container, initialState) {
 
 /**
  * @param {Color | ([Color, Color, Color, Color, Color, Color, Color, Color, Color])} color
+ * @param {number} squareSize
  *
  * @returns {Side}
  */
-function createSide(color) {
-  let _squares = (Array.isArray(color) ? color : Array(9)).fill(0).map((c) => {
-    return createSquare(c || color);
+function createSide(color, squareSize) {
+  let _squares = (Array.isArray(color) ? color : Array(9).fill(0)).map((c) => {
+    return createSquare(c || color, squareSize);
   });
 
   return {
@@ -509,20 +642,21 @@ function createSide(color) {
 
 /**
  * @param {Color} color
+ * @param {number} size
  *
  * @returns {Square}
  */
-function createSquare(color) {
+function createSquare(color, size) {
   const colorValue = getColorValue(color);
 
   const el = document.createElement('div');
 
   el.style.position = 'absolute';
-  el.style.width = `${SQUARE_DIAMETER}px`;
-  el.style.height = `${SQUARE_DIAMETER}px`;
+  el.style.width = `${size}px`;
+  el.style.height = `${size}px`;
 
   el.style.backgroundColor = colorValue;
-  el.style.outline = '1px solid var(--outline)';
+  el.style.outline = '1px solid var(--cube-outline)';
   el.style.outlineOffset = '2px';
   el.style.borderRadius = '100%';
 
@@ -531,8 +665,8 @@ function createSquare(color) {
     colorValue,
     el,
     moveTo: function (x, y) {
-      el.style.left = `${x - SQUARE_RADIUS}px`;
-      el.style.top = `${y - SQUARE_RADIUS}px`;
+      el.style.left = `${x - size / 2}px`;
+      el.style.top = `${y - size / 2}px`;
     },
   };
 }
@@ -544,89 +678,7 @@ function createSquare(color) {
  * @returns {ColorValue}
  */
 function getColorValue(color) {
-  return `var(--${color})`;
-}
-
-const SQUARE_DIAMETER = 24;
-const SQUARE_RADIUS = SQUARE_DIAMETER / 2;
-
-/**
- * @typedef {Object} Planes
- * @property {Guideline[]} top
- * @property {Guideline[]} right
- * @property {Guideline[]} left
- */
-
-/**
- * @typedef {Object} Guideline
- * @property {number} x
- * @property {number} y
- * @property {number} r
- * @property {number} d
- * @property {0 | 1 | 2} ring
- * @property {number} top
- * @property {number} left
- */
-
-/**
- * @param {number} size
- *
- * @returns {Planes}
- */
-function getPlanes(size) {
-  const CLIENT_SIZE = size - 64;
-  const PLANE_DIAMETER = (CLIENT_SIZE * 2) / 3;
-  const PLANE_RADIUS = PLANE_DIAMETER / 2;
-
-  /**
-   * @param {number} x
-   * @param {number} y
-   *
-   * @returns {Guideline[]}
-   */
-  function getGuidelines(x, y) {
-    return [0, 1, 2].map((ring) => {
-      const r = PLANE_RADIUS - ring * 40;
-
-      return {
-        x,
-        y,
-        r,
-        d: 2 * r,
-        ring,
-        top: y - r,
-        left: x - r,
-      };
-    });
-  }
-
-  return {
-    top: getGuidelines(size / 2, 32 + PLANE_RADIUS),
-    right: getGuidelines(32 + PLANE_DIAMETER, 32 + PLANE_DIAMETER),
-    left: getGuidelines(32 + PLANE_RADIUS, 32 + PLANE_DIAMETER),
-  };
-}
-
-/**
- * @param {HTMLDivElement} containerEl
- * @param {Planes} planes
- */
-function drawPlanes(containerEl, planes) {
-  [planes.top, planes.right, planes.left].flat().forEach((guideline) => {
-    const guidelineEl = document.createElement('div');
-
-    guidelineEl.style.position = 'absolute';
-    guidelineEl.style.top = `${guideline.top}px`;
-    guidelineEl.style.left = `${guideline.left}px`;
-    guidelineEl.style.width = `${guideline.d}px`;
-    guidelineEl.style.height = `${guideline.d}px`;
-
-    guidelineEl.style.border = '1px solid var(--guideline)';
-    guidelineEl.style.borderRadius = '100%';
-    guidelineEl.style.boxSizing = 'border-box';
-
-    containerEl.appendChild(guidelineEl);
-  });
+  return `var(--cube-${color})`;
 }
 
 /**
