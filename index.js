@@ -4,11 +4,11 @@ window.addEventListener(
   'resize',
   debounce(() => {
     init(cube.state);
-  }, 500),
+  }, 300),
   true,
 );
 
-const containerEl = document.getElementById('container');
+const canvasEl = document.getElementById('canvas-container');
 
 let cube;
 
@@ -16,19 +16,11 @@ let cube;
  * @param {import('./cube.js')._State} initialState
  */
 function init(initialState) {
-  const bodyWidth = document.body.clientWidth;
-  const bodyHeight = document.body.clientHeight;
-
-  const side = Math.min(bodyWidth, bodyHeight) * 0.8;
-
-  containerEl.style.width = `${side}px`;
-  containerEl.style.height = `${side}px`;
-
   if (!!cube) {
     cube.destroy();
   }
 
-  cube = createCube(containerEl, initialState);
+  cube = createCube(canvasEl, initialState);
 }
 
 init();

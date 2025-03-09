@@ -1,0 +1,23 @@
+{
+  "name": "jv-rubiks-cube",
+  "version": "0.0.0",
+  "description": "Visualization of a 3D Rubik's cube in 2D",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch & npx http-serve ./"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JGhignatti/jv-rubiks-cube.git"
+  },
+  "author": "JGhignatti <ghignatti.joao@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JGhignatti/jv-rubiks-cube/issues"
+  },
+  "homepage": "https://github.com/JGhignatti/jv-rubiks-cube#readme",
+  "dependencies": {
+    "@tailwindcss/cli": "^4.0.12",
+    "tailwindcss": "^4.0.12"
+  }
+}

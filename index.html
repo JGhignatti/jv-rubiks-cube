@@ -4,192 +4,91 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
     <title>JV Rubik's Cube</title>
+
     <link rel="icon" href="./favicon.ico" type="image/x-icon" />
 
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-
-      :root {
-        /* Cube colors */
-        --cube-red: oklch(0.637 0.237 25.331);
-        --cube-orange: oklch(0.705 0.213 47.604);
-        --cube-yellow: oklch(0.852 0.199 91.936);
-        --cube-green: oklch(0.723 0.219 149.579);
-        --cube-blue: oklch(0.623 0.214 259.815);
-        --cube-white: #fff;
-
-        --cube-guideline: var(--slate-700);
-        --cube-outline: var(--slate-300);
-
-        /* App colors */
-        --foreground: var(--slate-100);
-
-        --bg-dark: var(--slate-800);
-        --bg-light: var(--slate-500);
-
-        --focus-outline: var(--violet-500);
-
-        /* Color palette */
-        --violet-500: oklch(0.606 0.25 292.717);
-
-        --slate-50: oklch(0.984 0.003 247.858);
-        --slate-100: oklch(0.968 0.007 247.896);
-        --slate-200: oklch(0.929 0.013 255.508);
-        --slate-300: oklch(0.869 0.022 252.894);
-        --slate-400: oklch(0.704 0.04 256.788);
-        --slate-500: oklch(0.554 0.046 257.417);
-        --slate-600: oklch(0.446 0.043 257.281);
-        --slate-700: oklch(0.372 0.044 257.287);
-        --slate-800: oklch(0.279 0.041 260.031);
-        --slate-900: oklch(0.208 0.042 265.755);
-        --slate-950: oklch(0.129 0.042 264.695);
-      }
-
-      html {
-        font-size: 16px;
-      }
-
-      body {
-        width: 100vw;
-        height: 100vh;
-
-        margin: 0;
-
-        color: var(--foreground);
-
-        font-family: 'Rubik', sans-serif;
-        font-optical-sizing: auto;
-        font-weight: 400;
-        font-style: normal;
-        font-size: 1rem;
-
-        background-color: var(--bg-dark);
-      }
-
-      header {
-        width: 100%;
-
-        padding: 1.5rem 0;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      header > h1 {
-        margin: 0;
-
-        font-size: 2.5rem;
-      }
-
-      main {
-        display: flex;
-
-        gap: 1rem;
-
-        align-items: center;
-        justify-content: center;
-      }
-
-      #container {
-        position: relative;
-
-        min-width: 600px;
-        min-height: 600px;
-
-        flex-shrink: 0;
-
-        border: 2px solid var(--bg-light);
-        border-radius: 0.75rem;
-      }
-
-      #moves {
-        display: grid;
-
-        padding: 1rem;
-
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.5rem;
-
-        flex-shrink: 0;
-
-        border: 2px solid var(--bg-light);
-        border-radius: 0.75rem;
-      }
-
-      @media (max-width: 950px) {
-        main {
-          flex-direction: column;
-        }
-
-        #moves {
-          grid-template-columns: 1fr;
-          grid-template-rows: repeat(2, 1fr);
-          grid-auto-flow: column;
-        }
-      }
-
-      #moves > button {
-        padding: 0.5rem 1rem;
-
-        font-size: 1.25rem;
-
-        color: var(--foreground);
-
-        background-color: transparent;
-
-        border: 2px solid var(--bg-light);
-        border-radius: 8px;
-        outline-color: var(--focus-outline);
-
-        cursor: pointer;
-
-        transition: all 150ms ease-in-out;
-      }
-
-      #moves > button:hover {
-        background-color: var(--bg-light);
-        box-shadow: 0 10px 15px -3px color-mix(in oklab, var(--focus-outline)
-                50%, transparent),
-          0 4px 6px -4px color-mix(in oklab, var(--focus-outline) 50%, transparent);
-      }
-
-      #moves > button:focus-visible {
-        outline: 2px solid var(--focus-outline);
-        outline-offset: 2px;
-      }
-    </style>
+    <link href="./output.css" rel="stylesheet" />
   </head>
-  <body>
-    <header>
-      <h1>JV Rubik's Cube</h1>
+  <body class="w-screen h-screen m-0 text-slate-100 bg-slate-900">
+    <header
+      class="mx-auto w-full max-w-[theme(screens.lg)] py-6 px-4 flex items-center justify-center gap-2"
+    >
+      <h1 class="m-0 grow flex justify-center text-3xl sm:text-5xl">
+        JV Rubik's Cube
+      </h1>
+
+      <a
+        href="https://github.com/JGhignatti/jv-rubiks-cube"
+        target="_blank"
+        class="btn-ghost btn-icon"
+      >
+        <svg
+          class="size-6"
+          aria-hidden="true"
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M12.006 2a9.847 9.847 0 0 0-6.484 2.44 10.32 10.32 0 0 0-3.393 6.17 10.48 10.48 0 0 0 1.317 6.955 10.045 10.045 0 0 0 5.4 4.418c.504.095.683-.223.683-.494 0-.245-.01-1.052-.014-1.908-2.78.62-3.366-1.21-3.366-1.21a2.711 2.711 0 0 0-1.11-1.5c-.907-.637.07-.621.07-.621.317.044.62.163.885.346.266.183.487.426.647.71.135.253.318.476.538.655a2.079 2.079 0 0 0 2.37.196c.045-.52.27-1.006.635-1.37-2.219-.259-4.554-1.138-4.554-5.07a4.022 4.022 0 0 1 1.031-2.75 3.77 3.77 0 0 1 .096-2.713s.839-.275 2.749 1.05a9.26 9.26 0 0 1 5.004 0c1.906-1.325 2.74-1.05 2.74-1.05.37.858.406 1.828.101 2.713a4.017 4.017 0 0 1 1.029 2.75c0 3.939-2.339 4.805-4.564 5.058a2.471 2.471 0 0 1 .679 1.897c0 1.372-.012 2.477-.012 2.814 0 .272.18.592.687.492a10.05 10.05 0 0 0 5.388-4.421 10.473 10.473 0 0 0 1.313-6.948 10.32 10.32 0 0 0-3.39-6.165A9.847 9.847 0 0 0 12.007 2Z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </a>
     </header>
 
-    <main>
-      <div id="container"></div>
+    <main
+      class="px-4 sm:px-6 mx-auto w-full max-w-[theme(screens.lg)] grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_150px] place-items-center"
+    >
+      <div
+        class="max-w-[800px] w-full aspect-square flex justify-center items-center border-2 border-slate-600 rounded-xl"
+      >
+        <div id="canvas-container" class="relative size-full"></div>
+      </div>
 
-      <div id="moves">
-        <button id="button-front">F</button>
-        <button id="button-front-prime">F'</button>
-        <button id="button-up">U</button>
-        <button id="button-up-prime">U'</button>
-        <button id="button-right">R</button>
-        <button id="button-right-prime">R'</button>
-        <button id="button-left">L</button>
-        <button id="button-left-prime">L'</button>
-        <button id="button-down">D</button>
-        <button id="button-down-prime">D'</button>
-        <button id="button-back">B</button>
-        <button id="button-back-prime">B'</button>
-        <button id="button-m">M</button>
-        <button id="button-m-prime">M'</button>
-        <button id="button-e">E</button>
-        <button id="button-e-prime">E'</button>
-        <button id="button-s">S</button>
-        <button id="button-s-prime">S'</button>
+      <div
+        class="grid grid-cols-4 sm:grid-cols-1 sm:max-lg:grid-rows-2 sm:grid-flow-col p-4 gap-2 border-2 border-slate-600 rounded-xl lg:grid-cols-2 lg:grid-flow-row"
+      >
+        <button id="button-front" class="btn">F</button>
+        <button id="button-front-prime" class="btn">F'</button>
+        <button id="button-up" class="btn">U</button>
+        <button id="button-up-prime" class="btn">U'</button>
+        <button id="button-right" class="btn">R</button>
+        <button id="button-right-prime" class="btn">R'</button>
+        <button id="button-left" class="btn">L</button>
+        <button id="button-left-prime" class="btn">L'</button>
+        <button id="button-down" class="btn">D</button>
+        <button id="button-down-prime" class="btn">D'</button>
+        <button id="button-back" class="btn">B</button>
+        <button id="button-back-prime" class="btn">B'</button>
+        <button id="button-m" class="btn">M</button>
+        <button id="button-m-prime" class="btn">M'</button>
+        <button id="button-e" class="btn">E</button>
+        <button id="button-e-prime" class="btn">E'</button>
+        <button id="button-s" class="btn">S</button>
+        <button id="button-s-prime" class="btn">S'</button>
       </div>
     </main>
+
+    <footer
+      class="w-full max-w-[theme(screens.md)] mx-auto p-8 opacity-60 text-center"
+    >
+      <i>
+        JV
+        <a
+          href="https://github.com/JGhignatti"
+          target="_blank"
+          class="text-sky-300 hover:text-sky-200 transition-colors"
+        >
+          https://github.com/JGhignatti
+        </a>
+      </i>
+    </footer>
 
     <script type="module" src="index.js"></script>
   </body>

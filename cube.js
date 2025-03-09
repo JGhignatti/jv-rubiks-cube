@@ -52,13 +52,11 @@
  *
  * @returns {Cube}
  */
-export function createCube(container, initialState) {
-  const containerEl = container;
-
+export function createCube(canvasEl, initialState) {
   const CONSTS = buildConsts();
 
-  const planes = getPlanes(containerEl.clientWidth);
-  drawPlanes(containerEl, planes);
+  const planes = getPlanes(canvasEl.clientWidth);
+  drawPlanes(canvasEl, planes);
   const intersections = getIntersections(planes);
 
   let _state = {
@@ -94,7 +92,7 @@ export function createCube(container, initialState) {
 
       square.moveTo(intersection.x, intersection.y);
 
-      containerEl.appendChild(square.el);
+      canvasEl.appendChild(square.el);
     });
   });
 
@@ -446,18 +444,37 @@ export function createCube(container, initialState) {
    * @returns {Consts}
    */
   function buildConsts() {
-    const sideSize = Math.max(containerEl.clientWidth, 600);
+    const sideSize = canvasEl.clientWidth;
 
-    let squareDiameter = 24;
-    if (sideSize < 750) {
+    let squareDiameter = 8;
+    if (sideSize >= 350) {
+      squareDiameter = 10;
+    }
+    if (sideSize >= 400) {
+      squareDiameter = 12;
+    }
+    if (sideSize >= 450) {
+      squareDiameter = 14;
+    }
+    if (sideSize >= 500) {
+      squareDiameter = 16;
+    }
+    if (sideSize >= 580) {
       squareDiameter = 18;
-    } else if (sideSize > 950) {
-      squareDiameter = 32;
+    }
+    if (sideSize >= 630) {
+      squareDiameter = 20;
+    }
+    if (sideSize >= 700) {
+      squareDiameter = 22;
+    }
+    if (sideSize >= 750) {
+      squareDiameter = 24;
     }
 
     return {
       SIDE: sideSize,
-      PADDING: 24,
+      PADDING: 1.5 * squareDiameter,
       SQUARE_DIAMETER: squareDiameter,
       SPEED: 3,
     };
@@ -511,17 +528,14 @@ export function createCube(container, initialState) {
     [planes.top, planes.right, planes.left].flat().forEach((guideline) => {
       const guidelineEl = document.createElement('div');
 
-      guidelineEl.style.position = 'absolute';
       guidelineEl.style.top = `${guideline.top}px`;
       guidelineEl.style.left = `${guideline.left}px`;
       guidelineEl.style.width = `${guideline.d}px`;
       guidelineEl.style.height = `${guideline.d}px`;
 
-      guidelineEl.style.border = '1px solid var(--cube-guideline)';
-      guidelineEl.style.borderRadius = '100%';
-      guidelineEl.style.boxSizing = 'border-box';
+      guidelineEl.classList.add('guideline');
 
-      containerEl.appendChild(guidelineEl);
+      canvasEl.appendChild(guidelineEl);
     });
   }
 
@@ -541,7 +555,7 @@ export function createCube(container, initialState) {
       _state = futureState;
     },
     destroy() {
-      containerEl.innerHTML = '';
+      canvasEl.innerHTML = '';
     },
   };
 }
@@ -637,7 +651,6 @@ function createSide(color, squareSize) {
 /**
  * @typedef {Object} Square
  * @property {Color} color
- * @property {ColorValue} colorValue
  * @property {HTMLDivElement} el
  * @property {(x: number, y: number) => void} moveTo
  */
@@ -647,48 +660,28 @@ function createSide(color, squareSize) {
  */
 
 /**
- * @typedef {`var(--${Color})`} ColorValue
- */
-
-/**
  * @param {Color} color
  * @param {number} size
  *
  * @returns {Square}
  */
 function createSquare(color, size) {
-  const colorValue = getColorValue(color);
-
   const el = document.createElement('div');
 
-  el.style.position = 'absolute';
   el.style.width = `${size}px`;
   el.style.height = `${size}px`;
 
-  el.style.backgroundColor = colorValue;
-  el.style.outline = '1px solid var(--cube-outline)';
-  el.style.outlineOffset = '2px';
-  el.style.borderRadius = '100%';
+  el.classList.add('square');
+  el.classList.add(color);
 
   return {
     color,
-    colorValue,
     el,
     moveTo: function (x, y) {
       el.style.left = `${x - size / 2}px`;
       el.style.top = `${y - size / 2}px`;
     },
   };
-}
-
-/**
- *
- * @param {Color} color
- *
- * @returns {ColorValue}
- */
-function getColorValue(color) {
-  return `var(--cube-${color})`;
 }
 
 /**
