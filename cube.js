@@ -3,6 +3,7 @@
  * @property {_State} state
  * @property {(action: Move) => void} move
  * @property {() => void} destroy
+ * @property {(newOptions: Partial<CubeOptions>) => void} updateOptions
  */
 
 /**
@@ -18,6 +19,11 @@
 /**
  * @typedef {_Move | `${_Move}_PRIME`} Move
  * @typedef {'F' | 'U' | 'R' | 'L' | 'D' | 'B' | 'M' | 'E' | 'S'} _Move
+ */
+
+/**
+ * @typedef {Object} CubeOptions
+ * @property {number} speed
  */
 
 /**
@@ -49,11 +55,12 @@
 /**
  * @param {HTMLDivElement} container
  * @param {_State} [initialState]
+ * @param {CubeOptions} [options]
  *
  * @returns {Cube}
  */
-export function createCube(canvasEl, initialState) {
-  const CONSTS = buildConsts();
+export function createCube(canvasEl, initialState, options) {
+  let CONSTS = buildConsts();
 
   const planes = getPlanes(canvasEl.clientWidth);
   drawPlanes(canvasEl, planes);
@@ -355,18 +362,19 @@ export function createCube(canvasEl, initialState) {
       });
     });
 
+    const stepsSize = CONSTS.SPEED === 0 ? 0 : 20;
     const steps = modified.map(({ square, planeKey, arc, point }) => {
       if (!planeKey) {
         const deltaX = point.to.x - point.from.x;
         const deltaY = point.to.y - point.from.y;
 
-        const stepX = deltaX / 10;
-        const stepY = deltaY / 10;
+        const stepX = deltaX / stepsSize;
+        const stepY = deltaY / stepsSize;
 
         return {
           square,
           steps: [
-            ...Array(10)
+            ...Array(stepsSize)
               .fill(0)
               .map((_, index) => {
                 return {
@@ -402,7 +410,7 @@ export function createCube(canvasEl, initialState) {
       return {
         square,
         steps: [
-          ...Array(10)
+          ...Array(stepsSize)
             .fill(0)
             .map((_, index, arr) => {
               const total = arr.length;
@@ -426,7 +434,7 @@ export function createCube(canvasEl, initialState) {
 
     let stepCounter = 0;
     const interval = setInterval(() => {
-      if (stepCounter < 11) {
+      if (stepCounter < stepsSize + 1) {
         steps.forEach(({ square, steps }) => {
           square.moveTo(steps[stepCounter].x, steps[stepCounter].y);
         });
@@ -437,7 +445,7 @@ export function createCube(canvasEl, initialState) {
 
         clearInterval(interval);
       }
-    }, CONSTS.SPEED * 10);
+    }, CONSTS.SPEED * 5);
   }
 
   /**
@@ -476,7 +484,7 @@ export function createCube(canvasEl, initialState) {
       SIDE: sideSize,
       PADDING: 1.5 * squareDiameter,
       SQUARE_DIAMETER: squareDiameter,
-      SPEED: 3,
+      SPEED: options?.speed ?? 3,
     };
   }
 
@@ -556,6 +564,14 @@ export function createCube(canvasEl, initialState) {
     },
     destroy() {
       canvasEl.innerHTML = '';
+    },
+    updateOptions(newOptions) {
+      options = {
+        ...(options || {}),
+        ...newOptions,
+      };
+
+      CONSTS = buildConsts();
     },
   };
 }

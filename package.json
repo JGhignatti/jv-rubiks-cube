@@ -4,7 +4,8 @@
   "description": "Visualization of a 3D Rubik's cube in 2D",
   "main": "index.js",
   "scripts": {
-    "start": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch & npx http-serve ./"
+    "styles": "npx @tailwindcss/cli -i ./input.css -o ./output.css --watch",
+    "serve": "npx http-serve ./"
   },
   "repository": {
     "type": "git",

@@ -20,6 +20,14 @@
   @apply btn-base bg-slate-100/5 transition-colors hover:bg-slate-100/15 btn-shadow btn-focus-visible;
 }
 
+@utility btn-confirm {
+  @apply btn-base text-green-300 bg-transparent border-2 border-green-500 hover:text-green-500 hover:border-green-600 btn-shadow btn-focus-visible;
+}
+
+@utility btn-cancel {
+  @apply btn-base text-red-300 bg-transparent border-2 border-red-500 hover:text-red-500 hover:border-red-600 btn-shadow btn-focus-visible;
+}
+
 @utility btn-base {
   @apply rounded-lg py-2 px-4;
 }

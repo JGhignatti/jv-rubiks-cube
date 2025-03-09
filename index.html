@@ -42,36 +42,92 @@
       </a>
     </header>
 
-    <main
-      class="px-4 sm:px-6 mx-auto w-full max-w-[theme(screens.lg)] grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_150px] place-items-center"
-    >
+    <main class="w-full flex flex-col gap-4">
       <div
-        class="max-w-[800px] w-full aspect-square flex justify-center items-center border-2 border-slate-600 rounded-xl"
+        class="px-4 sm:px-6 mx-auto w-full max-w-[theme(screens.lg)] grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_150px] place-items-center"
       >
-        <div id="canvas-container" class="relative size-full"></div>
+        <div
+          class="max-w-[800px] w-full aspect-square flex justify-center items-center border-2 border-slate-600 rounded-xl"
+        >
+          <div id="canvas-container" class="relative size-full"></div>
+        </div>
+
+        <div
+          class="grid grid-cols-4 sm:grid-cols-1 sm:max-lg:grid-rows-2 sm:grid-flow-col p-4 gap-2 border-2 border-slate-600 rounded-xl lg:grid-cols-2 lg:grid-flow-row"
+        >
+          <button id="button-front" class="btn">F</button>
+          <button id="button-front-prime" class="btn">F'</button>
+          <button id="button-up" class="btn">U</button>
+          <button id="button-up-prime" class="btn">U'</button>
+          <button id="button-right" class="btn">R</button>
+          <button id="button-right-prime" class="btn">R'</button>
+          <button id="button-left" class="btn">L</button>
+          <button id="button-left-prime" class="btn">L'</button>
+          <button id="button-down" class="btn">D</button>
+          <button id="button-down-prime" class="btn">D'</button>
+          <button id="button-back" class="btn">B</button>
+          <button id="button-back-prime" class="btn">B'</button>
+          <button id="button-m" class="btn">M</button>
+          <button id="button-m-prime" class="btn">M'</button>
+          <button id="button-e" class="btn">E</button>
+          <button id="button-e-prime" class="btn">E'</button>
+          <button id="button-s" class="btn">S</button>
+          <button id="button-s-prime" class="btn">S'</button>
+        </div>
       </div>
 
-      <div
-        class="grid grid-cols-4 sm:grid-cols-1 sm:max-lg:grid-rows-2 sm:grid-flow-col p-4 gap-2 border-2 border-slate-600 rounded-xl lg:grid-cols-2 lg:grid-flow-row"
-      >
-        <button id="button-front" class="btn">F</button>
-        <button id="button-front-prime" class="btn">F'</button>
-        <button id="button-up" class="btn">U</button>
-        <button id="button-up-prime" class="btn">U'</button>
-        <button id="button-right" class="btn">R</button>
-        <button id="button-right-prime" class="btn">R'</button>
-        <button id="button-left" class="btn">L</button>
-        <button id="button-left-prime" class="btn">L'</button>
-        <button id="button-down" class="btn">D</button>
-        <button id="button-down-prime" class="btn">D'</button>
-        <button id="button-back" class="btn">B</button>
-        <button id="button-back-prime" class="btn">B'</button>
-        <button id="button-m" class="btn">M</button>
-        <button id="button-m-prime" class="btn">M'</button>
-        <button id="button-e" class="btn">E</button>
-        <button id="button-e-prime" class="btn">E'</button>
-        <button id="button-s" class="btn">S</button>
-        <button id="button-s-prime" class="btn">S'</button>
+      <div class="w-full max-w-[theme(screens.md)] mx-auto px-4">
+        <div
+          class="p-8 flex flex-col gap-4 border-2 border-slate-600 rounded-xl"
+        >
+          <div class="flex flex-col gap-1">
+            <label for="speed-range">Speed</label>
+            <div class="flex items-center gap-4">
+              <input
+                id="speed-range"
+                type="range"
+                min="1"
+                max="10"
+                value="7"
+                step="1"
+                class="grow outline-violet-500 outline-offset-2 focus-visible:outline-2 rounded-lg accent-violet-400"
+              />
+              <span
+                id="speed-range-value"
+                class="shrink-0 text-violet-400 font-bold"
+              >
+                7
+              </span>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <label for="play-moves">Play moves</label>
+            <div class="flex items-end gap-2">
+              <textarea
+                id="play-moves"
+                class="grow px-4 py-2 resize-none rounded-lg border-2 border-slate-600 bg-slate-800 outline-violet-500 outline-offset-2 focus-visible:outline-2"
+              ></textarea>
+              <button id="button-play-moves" class="btn btn-icon">
+                <svg
+                  class="size-6"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8.6 5.2A1 1 0 0 0 7 6v12a1 1 0 0 0 1.6.8l8-6a1 1 0 0 0 0-1.6l-8-6Z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
 
